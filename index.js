@@ -2,7 +2,7 @@
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
   import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
   import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-analytics.js";
-  import { getDatabase, set, ref } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+  import { getDatabase, set, ref, onValue, child } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
   // TODO: Add SDKs for Firebase products that you want to use
   // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -32,9 +32,21 @@ onAuthStateChanged(auth, (user) => {
   if (user) {
     // User is signed in, see docs for a list of available properties
     // https://firebase.google.com/docs/reference/js/auth.user
-    const uid = user.uid;
+    const uid = user.uid
+    console.log(uid);
 
+    onValue(ref(database, "/users/" + uid), (snapshot) => {
+          if (snapshot.exists()) {
     window.location.href = "login.html";
+          }
+          else {
+           window.location.href = "profile_setup.html";
+          }
+
+        });
+
+
+
 
   }
   else {
